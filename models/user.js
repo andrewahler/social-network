@@ -11,19 +11,17 @@ const UserSchema = new Schema(
         },
         email: {
             type: String,
-            required: true,
+            trim: true,
+            lowercase: true,
             unique: true,
-            validate: {
-                validator: () => Promise.resolve(false),
-                message: 'Email validation failed'
-              }
+            required: 'Email address is required',
+            validate: [validateEmail, 'Please fill a valid email address'],
         },
-
-
-
-
-
+        
 })
 
 
-UserSchema
+UserSchema.path('email').validate(function (email) {
+    var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailRegex.test(email.text); 
+ }, 'The e-mail field cannot be empty.')
