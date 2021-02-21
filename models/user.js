@@ -14,14 +14,34 @@ const UserSchema = new Schema(
             trim: true,
             lowercase: true,
             unique: true,
-            required: 'Email address is required',
-            validate: [validateEmail, 'Please fill a valid email address'],
+            match: [/.+@.+\..+/]
         },
-        
+
+        thoughts: {
+            type: Array,
+            required: true,
+            enum: ['thoughtText' , 'createdAt', 'username', 'reactions']
+        },
+
+        friends: {
+            type: Array,
+            required: true,
+            enum: ['usernmame', 'email', 'thoughts', 'friends']
+
+
+
+        }
+
 })
 
-
-UserSchema.path('email').validate(function (email) {
-    var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    return emailRegex.test(email.text); 
- }, 'The e-mail field cannot be empty.')
+ UserSchema.virtual('friendCount').get(function() {
+    return this.friends.reduce(
+      (total, friends) => total + friends.thoughts.length + 1,
+      0
+    );
+  });
+  
+  const User = model('User', UserSchema);
+  
+  module.exports = User;
+  
