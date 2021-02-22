@@ -2,7 +2,7 @@ const { User, Thought, Reaction } = require('../models');
 
 const thoughtController = {
 
-    getAllThoughts(req, res) {
+    getAllThought(req, res) {
         Thought.find({})
         .populate({ path: 'reactions', select: '-__v' })
         .select('-__v')
@@ -55,7 +55,7 @@ const thoughtController = {
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No th' });
+                res.status(404).json({ message: 'thought not found' });
                 return;
             }
             res.json(dbThoughtData);
@@ -70,16 +70,16 @@ const thoughtController = {
         Thought.findOneAndDelete({ _id: params.id })
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No thought found with this id'});
+                res.status(404).json({ message: 'thought not found'});
                 return;
             }
             
             User.findOneAndUpdate(
                 { username: dbThoughtData.username },
-                { $pull: { thoughts: params.id } }
+                { $pull: { thought: params.id } }
             )
             .then(() => {
-                res.json({message: 'Successfully deleted the thought'});
+                res.json({message: 'deleted'});
             })
             .catch(err => res.status(500).json(err));
         })
@@ -95,7 +95,7 @@ const thoughtController = {
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No thought found with this id' });
+                res.status(404).json({ message: 'thought not foundd' });
                 return;
             }
             res.json(dbThoughtData);
@@ -111,10 +111,10 @@ const thoughtController = {
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No thought found with this id' });
+                res.status(404).json({ message: 'thought not found' });
                 return;
             }
-            res.json({message: 'Successfully deleted the reaction'});
+            res.json({message: 'deleted'});
         })
         .catch(err => res.status(500).json(err));
     },

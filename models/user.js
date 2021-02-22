@@ -18,13 +18,13 @@ const UserSchema = new Schema(
         },
 
         thoughts: {
-            type: Array,
+            type: String,
             required: true,
             enum: ['thoughtText' , 'createdAt', 'username', 'reactions']
         },
 
         friends: {
-            type: Array,
+            type: String,
             required: true,
             enum: ['usernmame', 'email', 'thoughts', 'friends']
         }
