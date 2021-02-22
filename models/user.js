@@ -27,17 +27,13 @@ const UserSchema = new Schema(
             type: Array,
             required: true,
             enum: ['usernmame', 'email', 'thoughts', 'friends']
-
-
-
         }
 
 })
 
  UserSchema.virtual('friendCount').get(function() {
     return this.friends.reduce(
-      (total, friends) => total + friends.thoughts.length + 1,
-      0
+
     );
   });
   
